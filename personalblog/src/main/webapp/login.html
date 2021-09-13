@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <script src="jquery-1.9.1.min.js"></script>
+
+    <script>
+        function mysub(type) {
+            var username = jQuery("#username");
+            var password = jQuery("#password");
+            if (type == 2) {
+                //清空操作
+                if (confirm("确认清空？")) {
+                    username.val("");
+                    password.val("");
+                }
+                return false;
+            }
+            // 1.非空效验
+            if(type == 1) {
+                //1.非空校验
+                if (username.val().trim() == "") {
+                    //用户名没有输入
+                    alert("请先输入用户名！")
+                    username.focus();
+                    return false;
+                }
+                if (password.val().trim() == "") {
+                    //用户名没有输入
+                    alert("请输入密码！")
+                    password.focus();
+                    return false;
+                }
+                //2.请求后端，实现登陆验证
+                jQuery.getJSON("login",
+                    {
+                        "username": username.val(),
+                        "password": password.val()
+                    },
+                    function (data) {
+                        if (data != null && data.succ == 1) {
+                            //登陆成功
+                            alert("恭喜：登录成功");
+                            location.href = "myartlist.html";
+                        } else {
+                            //登陆失败
+                            alert("登录失败: " + data.msg);
+                        }
+                    });
+            }
+            if (type == 3) {
+                location.href = "reg.html";
+            }
+        }
+    </script>
+</head>
+<body>
+<div style="margin-top: 70px;text-align: center">
+    <h1>登录功能</h1>
+    用户名：<input id="username" name="username" type="text"><p></p>
+    密&nbsp;&nbsp;码：<input id="password" name="password" type="password"><p></p>
+    <input type="button" onclick="mysub(1)" value=" 提 交 ">
+    <input type="button" onclick="mysub(2)" value=" 清 空 ">
+    <input type="button" onclick="mysub(3)" value=" 注 册 ">
+</div>
+</body>
+</html>
